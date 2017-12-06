@@ -1,6 +1,6 @@
 {
 	"name": "node-twitter-api-promisified",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Simple module for using Twitter's API in node.js",
 	"keywords": [
 		"twitter",
