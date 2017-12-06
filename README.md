@@ -22,24 +22,22 @@ Simple module for using Twitter's API in node.js
 
 ### Step 1: Initialization ###
 ```javascript
-const twitterAPI = require('node-twitter-api');
+const twitterAPI = require('node-twitter-api')
 const twitter = new twitterAPI({
 	consumerKey: 'your consumer Key',
 	consumerSecret: 'your consumer secret',
 	callback: 'http://yoururl.tld/something'
-});
+})
 ```
 
 Optionally you can add `x_auth_access_type: "read"` or `x_auth_access_type: "write"` (see: https://dev.twitter.com/oauth/reference/post/oauth/request_token).
 ### Step 2: Getting a request token ###
 ```javascript
-twitter.getRequestToken((error, requestToken, requestTokenSecret, results) => {
-	if (error) {
-		console.log("Error getting OAuth request token : " + error);
-	} else {
-		//store token and tokenSecret somewhere, you'll need them later; redirect user
-	}
-});
+twitter.getRequestToken()
+  .then(data => {
+    const { oauthToken, oauthTokenSecret, results } = data
+    // Store oauthToken and oauthTokenSecret somewhere, you'll need them later
+  })
 ```
 If no error has occured, you now have a `requestToken` and a `requestTokenSecret`. You should store them somewhere (e.g. in a session, if you are using express), because you will need them later to get the current user's access token, which is used for authentication.
 
@@ -47,30 +45,21 @@ If no error has occured, you now have a `requestToken` and a `requestTokenSecret
 Redirect the user to `https://twitter.com/oauth/authenticate?oauth_token=[requestToken]`. `twitter.getAuthUrl(requestToken, options)` also returns that URL (the options parameter is optional and may contain a boolean `force_login` and a String `screen_name` - see the Twitter API Documentation for more information on these parameters).
 If he allows your app to access his data, Twitter will redirect him to your callback-URL (defined in Step 1) containing the get-parameters: `oauth_token` and `oauth_verifier`. You can use `oauth_token` (which is the `requestToken` in Step 2) to find the associated `requestTokenSecret`. You will need `requestToken`, `requestTokenSecret` and `oauth_verifier` to get an Access Token.
 ```javascript
-twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, (error, accessToken, accessTokenSecret, results) => {
-	if (error) {
-		console.log(error);
-	} else {
-		//store accessToken and accessTokenSecret somewhere (associated to the user)
-		//Step 4: Verify Credentials belongs here
-	}
-});
+twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier)
+  .then(data => {
+    const { oauthAccessToken, oauthAccessTokenSecret, results } = data
+    // Store oauthAccessToken and oauthAccessTokenSecret somewhere
+    // Next: Optionally verify credentials
+  })
 ```
 If no error occured, you now have an `accessToken` and an `accessTokenSecret`. You need them to authenticate later API-calls.
 
 ### Step 4: (Optional) Verify Credentials ###
 ```javascript
-twitter.verifyCredentials(accessToken, accessTokenSecret, params, (error, data, response) => {
-	if (error) {
-		//something was wrong with either accessToken or accessTokenSecret
-		//start over with Step 1
-	} else {
-		//accessToken and accessTokenSecret can now be used to make api-calls (not yet implemented)
-		//data contains the user-data described in the official Twitter-API-docs
-		//you could e.g. display his screen_name
-		console.log(data["screen_name"]);
-	}
-});
+twitter.verifyCredentials(accessToken, accessTokenSecret, params)
+  .then(() => {
+    // If this promise resolves, credentials are valid
+  })
 ```
 In the above example, `params` is an optional object containing extra parameters to be sent to the Twitter endpoint (see https://dev.twitter.com/rest/reference/get/account/verify_credentials)
 
@@ -78,19 +67,11 @@ In the above example, `params` is an optional object containing extra parameters
 (Allmost) all function names replicate the endpoints of the Twitter API 1.1.
 If you want to post a status e. g. - which is done by posting data to statuses/update - you can just do the following:
 ```javascript
-twitter.statuses("update", {
-		status: "Hello world!"
-	},
-	accessToken,
-	accessTokenSecret,
-	(error, data, response) => {
-		if (error) {
-			// something went wrong
-		} else {
-			// data contains the data sent by twitter
-		}
-	}
-);
+twitter.statuses("update", { status: "Hello world!" },
+  accessToken, accessTokenSecret)
+  .then(data => {
+    // Data contains the data sent by twitter
+  })
 ```
 
 Most of the functions use the scheme:
