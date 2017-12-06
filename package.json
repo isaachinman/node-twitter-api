@@ -23,15 +23,18 @@
 	"engines": {
 		"node": ">=0.4.0"
 	},
-  "main": "./twitter",
-  "scripts": {
-    "lint": "eslint ."
-  },
+	"main": "./dist/index.js",
+	"scripts": {
+		"build": "babel src --presets babel-preset-es2015 --out-dir dist",
+		"lint": "eslint ."
+	},
 	"dependencies": {
 		"oauth": ">=0.8.4",
 		"request": "*"
 	},
 	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-preset-es2015": "^6.24.1",
 		"eslint": "^4.12.1",
 		"eslint-config-airbnb-base": "^12.1.0",
 		"eslint-plugin-import": "^2.8.0"
