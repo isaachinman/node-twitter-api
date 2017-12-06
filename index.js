@@ -1,1 +1,1 @@
-module.exports = require('./twitter');
+module.exports = require('./twitter')

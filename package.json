@@ -2,23 +2,38 @@
 	"name": "node-twitter-api",
 	"version": "1.8.0",
 	"description": "Simple module for using Twitter's API in node.js",
-	"keywords": ["twitter", "oauth", "rest", "streaming"],
-	"homepage": "https://github.com/reneraab/node-twitter-api",
-	"author": "René Raab",
-	"licenses": {
-		"type": "MIT",
-		"url": "https://raw.github.com/reneraab/node-twitter-api/master/LICENSE"
-	},
+	"keywords": [
+		"twitter",
+		"oauth",
+		"rest",
+		"streaming"
+	],
+	"homepage": "https://github.com/isaachinman/node-twitter-api",
+	"author": "Isaac Hinman | 2017",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/isaachinman/node-twitter-api/master/LICENSE"
+		}
+	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/reneraab/node-twitter-api.git"
-	},
-	"dependencies": {
-		"oauth": ">=0.8.4",
-		"request": "*"
+		"url": "https://github.com/isaachinman/node-twitter-api"
 	},
 	"engines": {
 		"node": ">=0.4.0"
 	},
-	"main": "./twitter"
+  "main": "./twitter",
+  "scripts": {
+    "lint": "eslint ."
+  },
+	"dependencies": {
+		"oauth": ">=0.8.4",
+		"request": "*"
+	},
+	"devDependencies": {
+		"eslint": "^4.12.1",
+		"eslint-config-airbnb-base": "^12.1.0",
+		"eslint-plugin-import": "^2.8.0"
+	}
 }
